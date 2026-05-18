@@ -1,0 +1,10 @@
+[project]
+name = "mcp-ap-automation"
+version = "0.1.0"
+description = "MCP server for AP automation on Exact Globe/Financials — PDF + UBL parsing, 3-way match, GL suggest, auto-book"
+requires-python = ">=3.10"
+dependencies = [
+  "mcp>=1.2.0",
+  "pypdf>=4.0",     # PDF text extraction
+  "requests>=2.31",
+]

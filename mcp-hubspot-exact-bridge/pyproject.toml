@@ -1,0 +1,6 @@
+[project]
+name = "mcp-hubspot-exact-bridge"
+version = "0.1.0"
+description = "MCP bridge between HubSpot CRM and Exact ERP — closes the sales/finance gap"
+requires-python = ">=3.10"
+dependencies = ["mcp>=1.2.0", "requests>=2.31"]
