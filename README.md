@@ -1,8 +1,6 @@
 # Exact ERP — open client + 4 MCP servers
 
-Dit is wat Clickker "de énige API-verbinding tussen Exact en uw
-bedrijfssoftware" noemt. In de open gebouwd, in een paar uur, voor de
-twee on-prem Exact ERP's die geen publieke REST API hebben.
+Twee on-prem Exact ERP's die geen publieke REST API hebben.
 
 | Doel | Wat deze repo spreekt |
 |---|---|
