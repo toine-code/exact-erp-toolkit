@@ -1,34 +1,34 @@
 # mcp-ap-automation
 
-End-to-end accounts payable automation for Exact Globe / Financials.
+End-to-end crediteuren-automatisering voor Exact Globe / Financials.
 
-The unsexy reality of MKB finance: someone retypes PDF supplier invoices
-into Exact, 3 minutes each, line by line, with typos. With this MCP,
-the workflow becomes:
+De onsexy realiteit van MKB-finance: iemand typt PDF-facturen over in
+Exact, 3 minuten per stuk, regel voor regel, met typfouten. Met deze
+MCP wordt de flow:
 
-1. PDF or UBL lands in a folder.
-2. *"Process new invoices, match to POs, book the clean ones."*
-3. Done.
+1. PDF of UBL valt binnen in een folder.
+2. *"Verwerk nieuwe facturen, match aan PO's, boek de schone."*
+3. Klaar.
 
 ## Tools
 
-| Tool | What it does |
+| Tool | Wat het doet |
 |---|---|
-| `extract_invoice_from_pdf` | Read a PDF, pull header + lines (heuristic; swap for Claude vision in prod) |
-| `extract_invoice_from_ubl` | Parse PEPPOL / NLCIUS UBL 2.1 XML (mandatory in NL late 2026) |
-| `extract_invoice_from_text` | Same extractor on raw text |
-| `match_to_purchase_order` | 3-way match: supplier + amount (+ optional PO ref), tolerance configurable |
-| `suggest_gl_account` | Heuristic GL suggestion from description keywords |
-| `auto_book_invoice` | Generate the Exact-XML purchase invoice; dry-run by default |
-| `ap_ageing` | Payables ageing buckets |
-| `pay_this_week` | Due within 7 days — the bookkeeper's hit list |
-| `spend_by_supplier` | Top suppliers by spend |
+| `extract_invoice_from_pdf` | Lees een PDF, haal header + regels eruit (heuristiek; vervang door Claude vision in productie) |
+| `extract_invoice_from_ubl` | Parseer PEPPOL / NLCIUS UBL 2.1 XML (in NL verplicht eind 2026) |
+| `extract_invoice_from_text` | Zelfde extractor op platte tekst |
+| `match_to_purchase_order` | 3-way match: leverancier + bedrag (+ optionele PO-ref), tolerantie configureerbaar |
+| `suggest_gl_account` | Heuristische grootboekrekening-suggestie op basis van keywords |
+| `auto_book_invoice` | Genereer de Exact-XML inkoopfactuur; dry-run by default |
+| `ap_ageing` | Crediteuren-aging buckets |
+| `pay_this_week` | Vervalt binnen 7 dagen — de hit-list voor de boekhouder |
+| `spend_by_supplier` | Top leveranciers op uitgaven |
 
-## PEPPOL note
+## PEPPOL-notitie
 
-Starting late 2026 Dutch B2B invoices must support PEPPOL / NLCIUS UBL.
-This server parses UBL natively so any PEPPOL Access Point output drops
-straight in.
+Vanaf eind 2026 moeten Nederlandse B2B-facturen PEPPOL / NLCIUS UBL
+ondersteunen. Deze server parseert UBL native, dus elke PEPPOL Access
+Point output kun je rechtstreeks gebruiken.
 
 ## Setup
 
@@ -41,38 +41,38 @@ pip install mcp pypdf requests
   "mcpServers": {
     "ap-automation": {
       "command": "python",
-      "args": ["/Users/you/sense-cloud-flex/mcp-ap-automation/server.py"],
+      "args": ["/Users/jij/exact-erp-toolkit/mcp-ap-automation/server.py"],
       "env": { "EXACT_MOCK": "1", "EXACT_VARIANT": "globe" }
     }
   }
 }
 ```
 
-## Typical session
+## Typische sessie
 
 ```
-You: Read ~/Downloads/kpn-mei.pdf and book it if it matches PO-2026-118.
+Jij: Lees ~/Downloads/kpn-mei.pdf en boek 'm als 'ie matcht met PO-2026-118.
 
-Claude (calls extract_invoice_from_pdf):
-  Supplier: KPN Zakelijk, Invoice KPN-2026-0500, EUR 413.82, due 31 mei.
+Claude (roept extract_invoice_from_pdf):
+  Leverancier: KPN Zakelijk, factuur KPN-2026-0500, EUR 413.82, vervalt 31 mei.
 
-Claude (calls match_to_purchase_order):
-  Exact reference match on PO-2026-118, delta EUR 0.00.
+Claude (roept match_to_purchase_order):
+  Exact reference match op PO-2026-118, delta EUR 0.00.
 
-Claude (calls auto_book_invoice, dry_run=true):
-  XML generated, 6 lines, GL 4500 (Telecom). Want me to book it?
+Claude (roept auto_book_invoice, dry_run=true):
+  XML gegenereerd, 6 regels, GL 4500 (Telecom). Zal ik 'm boeken?
 
-You: Yes, send it.
+Jij: Ja, stuur 'm.
 
 Claude (auto_book_invoice, dry_run=false):
-  Booked. XML written to /exact/import/purchase_70001_1779138712.xml.
-  Exact will process on next polling cycle (~2 min).
+  Geboekt. XML weggeschreven naar /exact/import/purchase_70001_1779138712.xml.
+  Exact verwerkt 'm bij de volgende poll (~2 min).
 ```
 
-## Production-grade extraction
+## Productie-grade extractie
 
-The bundled `extract_invoice_from_pdf` is a regex heuristic — fine for
-clean digital PDFs, weak on scans and exotic layouts. For production,
-replace the body of that tool with a single call to Claude (vision) and
-ask for structured JSON. That moves accuracy from ~70% to ~98% and
-handles scans natively.
+De meegeleverde `extract_invoice_from_pdf` is een regex-heuristiek —
+prima voor schone digitale PDFs, zwak op scans en exotische layouts.
+Voor productie: vervang die tool-body door één call naar Claude (vision)
+en vraag om gestructureerd JSON. Dat tilt de nauwkeurigheid van ~70%
+naar ~98% en handelt scans native af.

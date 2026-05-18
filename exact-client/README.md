@@ -1,17 +1,17 @@
 # Exact ERP (Globe + Financials) — Python client
 
-Open-source Python client for **Exact Globe** and **Exact Financials** —
-the two on-prem Exact ERPs that don't have a public REST API.
+Open-source Python client voor **Exact Globe** en **Exact Financials** —
+de twee on-prem Exact ERP's zonder publieke REST API.
 
-This is the layer Clickker and other middleware vendors claim is
-proprietary. It isn't. It's two well-known transports:
+Dit is de laag die Clickker en andere middleware-leveranciers
+propriëtair noemen. Maar het is gewoon twee bekende transports:
 
-| Direction | Transport |
+| Richting | Transport |
 |---|---|
-| Read | Direct MS SQL Server (ODBC) against the administration database |
-| Write | Exact-XML (the XSD-schema XML that Exact officially supports), dropped in a watched folder or POSTed to the XML webservice |
+| Read | Directe MS SQL Server (ODBC) tegen de administratie-database |
+| Write | Exact-XML (het XSD-schema dat Exact officieel ondersteunt), gedropt in een watched folder of POSTed naar de XML webservice |
 
-One Python interface for both products, mock mode out of the box.
+Eén Python-interface voor beide producten, mock-mode out of the box.
 
 ## Quick start
 
@@ -20,42 +20,42 @@ pip install -r requirements.txt
 python example_demo.py
 ```
 
-Mock-mode output (no Exact required):
-- 5 customers + 5 suppliers
-- 6 AR invoices (2 overdue 30+ days)
-- 5 AP invoices (2 overdue)
-- monthly financial summary
-- generated Exact-XML for a sales invoice + a purchase invoice
+Mock-mode output (geen Exact-installatie nodig):
+- 5 klanten + 5 leveranciers
+- 6 AR-facturen (2 overdue 30+ dagen)
+- 5 AP-facturen (2 overdue)
+- maandelijkse financiële samenvatting
+- gegenereerde Exact-XML voor verkoop- en inkoopfactuur
 
-## Going live
+## Live gaan
 
-1. Copy `.env.example` to `.env`.
-2. Pick `EXACT_VARIANT`: `globe` or `financials`.
-3. Get an ODBC user on the SQL Server hosting the administration.
-   Read-only is enough; the writes go through XML.
-4. Either point `EXACT_XML_DROP_FOLDER` at Globe's watched import folder,
-   or fill in the XML webservice URL + credentials.
-5. Set `EXACT_MOCK=0`.
+1. Kopieer `.env.example` naar `.env`.
+2. Kies `EXACT_VARIANT`: `globe` of `financials`.
+3. Krijg een ODBC-user op de SQL Server die de administratie host.
+   Read-only is genoeg; writes gaan via XML.
+4. Wijs `EXACT_XML_DROP_FOLDER` aan op de XML import-folder van Globe,
+   óf vul de XML webservice URL + credentials in.
+5. Zet `EXACT_MOCK=0`.
 
-## What's in the box
+## Wat zit erin
 
-| File | Purpose |
+| Bestand | Doel |
 |---|---|
 | `exact_client.py` | `ExactGlobeClient`, `ExactFinancialsClient`, `make_client()` factory, dataclasses |
-| `example_demo.py` | Runnable demo |
-| `.env.example` | Every config flag explained |
+| `example_demo.py` | Werkende demo |
+| `.env.example` | Elke config-flag uitgelegd |
 | `requirements.txt` | pyodbc + requests |
 
-## The "exclusive API" claim, debunked
+## De "exclusieve API"-claim, ontkracht
 
-Vendors like Clickker market this layer as "the only API connection to
-Exact". What they actually built is:
+Vendors zoals Clickker verkopen deze laag als "de enige API-koppeling
+met Exact". Wat ze in werkelijkheid hebben gebouwd:
 
-1. SQL queries against well-known tables (`Accountants`, `bptran`, etc.)
-2. An Exact-XML generator that respects the official XSD
+1. SQL queries tegen bekende tabellen (`Accountants`, `bptran`, etc.)
+2. Een Exact-XML generator die het officiële XSD respecteert
 
-Both are open. With ODBC credentials and the XSD (which Exact ships with
-the product), anyone can replicate it. What you pay middleware vendors
-for is **operations**: retry queues, monitoring, error handling, a
-support team that knows the Globe quirks. Real services — but not a
-moat, and not "exclusive".
+Beide zijn open. Met ODBC-credentials en de XSD (die Exact met het
+product meelevert) kan iedereen het repliceren. Wat je middleware-
+leveranciers wél betaalt is **operations**: retry-queues, monitoring,
+foutafhandeling, een support-team dat de Globe-quirks kent. Echte
+diensten — maar geen moat, en geen "exclusieve" API.

@@ -1,31 +1,31 @@
 # mcp-business-insights
 
-Skip the dashboards. Ask.
+Sla het dashboard over. Vraag het gewoon.
 
-> "What's my DSO and is it healthy?"
-> "Top 5 customers I should chase first."
-> "What's my revenue concentration risk?"
-> "Project cash for the next 90 days."
-> "How's the margin holding up?"
+> "Wat is mijn DSO en is die gezond?"
+> "Top 5 klanten die ik als eerste moet bellen."
+> "Wat is mijn omzetconcentratie-risico?"
+> "Voorspel mijn cash voor de komende 90 dagen."
+> "Hoe houdt mijn marge zich?"
 
-Every tool runs straight on Exact data via the shared `exact-client/`
-library, so it works in mock mode out of the box.
+Elke tool draait direct op Exact-data via de gedeelde `exact-client/`
+bibliotheek, dus werkt out of the box in mock mode.
 
 ## Tools
 
-| Tool | What it answers |
+| Tool | Wat het beantwoordt |
 |---|---|
-| `dso_analysis` | Days Sales Outstanding, ageing buckets, health interpretation |
-| `top_overdue_customers` | Ranked chase list (amount, days, count) |
-| `revenue_concentration` | Top-1 / top-3 / top-5 share of revenue + risk flag |
-| `cash_forecast_90d` | 13-week cash forecast from current AR/AP |
-| `margin_health` | Gross margin and pct vs healthy thresholds |
+| `dso_analysis` | Days Sales Outstanding, aging-buckets, gezondheids-oordeel |
+| `top_overdue_customers` | Ranked chase-lijst (bedrag, dagen, aantal) |
+| `revenue_concentration` | Top-1 / top-3 / top-5 omzetaandeel + risico-flag |
+| `cash_forecast_90d` | 13-weeks cashflow-forecast op basis van huidige AR/AP |
+| `margin_health` | Bruto marge en percentage tegen gezonde drempels |
 
-## Why MKB cares
+## Waarom MKB hier wat aan heeft
 
-Most accountants run these calculations once a quarter, manually, in
-Excel. With this MCP a managing director gets the same insight in
-seconds, in a conversation, without buying a BI tool.
+De meeste accountants draaien deze berekeningen één keer per kwartaal,
+met de hand, in Excel. Met deze MCP krijgt een directeur dezelfde
+inzichten in seconden, in een gesprek, zonder een BI-tool te kopen.
 
 ## Setup
 
@@ -38,8 +38,8 @@ pip install mcp requests
   "mcpServers": {
     "business-insights": {
       "command": "python",
-      "args": ["/Users/you/sense-cloud-flex/mcp-business-insights/server.py"],
-      "env": { "EXACT_MOCK": "1", "EXACT_VARIANT": "online" }
+      "args": ["/Users/jij/exact-erp-toolkit/mcp-business-insights/server.py"],
+      "env": { "EXACT_MOCK": "1", "EXACT_VARIANT": "globe" }
     }
   }
 }
